@@ -1,6 +1,6 @@
 require 'js'
 canvas = Canvas.new
-calc = Calculation.new(canvas, Player.new(canvas.width, canvas.height))
+calc = Calculation.new(canvas, Player.new(canvas))
 
 FPS = 30.freeze
 TIME_PER_FRAME = (1000 / FPS).freeze

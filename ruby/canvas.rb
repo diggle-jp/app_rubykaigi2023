@@ -1,29 +1,45 @@
 require 'js'
 
 class Canvas
-  attr_reader :canvas, :context, :width, :height
+  attr_reader :canvas, :context, :display_size
+
   def initialize
     @canvas = JS.global[:document].querySelector('#canvas')
     @context = canvas.getContext("2d")
-    @width = canvas[:width].to_i
-    @height = canvas[:height].to_i
+
+    body = JS.global[:document].querySelector('body')
+    @display_size = Point.new(body[:clientWidth].to_i, body[:clientHeight].to_i)
+
+    canvas.setAttribute('width', display_size.x)
+    canvas.setAttribute('height', display_size.y)
   end
 
   def render(player)
-    context.clearRect(0, 0, width, height)
-    context[:fillStyle] = 'green'
-    context.fillRect(0, 0, width, height)
+    context.clearRect(0, 0, display_size.x, display_size.y)
+    context[:fillStyle] = 'gray'
+    context.fillRect(0, 0, display_size.x, display_size.y)
     context[:fillStyle] = 'black'
+
+    x = 0
+    while x < display_size.x
+      y = 0
+      while y < display_size.y
+        context.strokeRect(x, y, 100, 100)
+        y += 100
+      end
+      x += 100
+    end
     render_player(player)
   end
 
   private
 
   def render_player(player)
-    context[:fillStyle] = '#0C91F1'
-    context.fillRect(player.x, player.y, 10, 10)
-    context[:fillStyle] = '#ED82F6'
-    context[:fillStyle] = '#8186FF'
-    context[:fillStyle] = '#7FDFFD'
+    context.drawImage(player.image, player.x, player.y, player.size.x, player.size.y)
+
+    player.bullets.each do |bullet|
+      context[:fillStyle] = bullet.color
+      context.fillRect(bullet.x, bullet.y, 10, 10)
+    end
   end
 end

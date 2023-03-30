@@ -1,9 +1,22 @@
 class Point
-  attr_reader :x, :y
-  attr_writer :x, :y
+  def initialize(_x, _y)
+    @_x = _x
+    @_y = _y
+  end
 
-  def initialize(x, y)
-    @x = x
-    @y = y
+  def x
+    @_x
+  end
+
+  def x=(_x)
+    @_x = _x
+  end
+
+  def y
+    @_y
+  end
+
+  def y=(_y)
+    @_y = _y
   end
 end
