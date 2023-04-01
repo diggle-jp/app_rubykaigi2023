@@ -1,29 +1,7 @@
 require 'js'
 
-class Player < Point
+class Player < Box
   class Bullets
-    class Bullet < Point
-      attr_reader :size, :vector, :type, :color
-
-      def initialize(x, y, size, vector, color, type)
-        self.x = x
-        self.y = y
-        @size = size
-        @vector = vector
-        @color = color
-        @type = type
-      end
-
-      def action!
-        self.x += vector.x
-        self.y += vector.y
-      end
-
-      def screen_out?(display_size)
-        display_size.x < x || display_size.y < y || x.negative? || (y + size.y).negative?
-      end
-    end
-
     attr_reader :player, :bullets
 
     def initialize(player)
@@ -40,7 +18,7 @@ class Player < Point
         _y = y - 8
         10.times do |index|
          _x = x + index * 10
-          bullets << Bullet.new(_x, _y, size, vector, color, type)
+          bullets << Bullet.new(_x, _y, size, vector, color)
         end
       when :boost
         color = '#8186FF'
@@ -49,21 +27,24 @@ class Player < Point
         _y = y - 10
         5.times do |index|
           _x = x + index * 10
-          bullets << Bullet.new(_x, _y, size, vector, color, type)
+          bullets << Bullet.new(_x, _y, size, vector, color)
         end
       when :normal
         color = '#ED82F6'
         size = Point.new(5, 30)
         vector = Point.new(25, 0)
-        bullets << Bullet.new(x, y - 45, size, Point.new(25, -15), color, type)
-        bullets << Bullet.new(x, y - 15, size, Point.new(25, 0), color, type)
-        bullets << Bullet.new(x, y + 15, size, Point.new(25, 15), color, type)
+        bullets << Bullet.new(x, y - 45, size, Point.new(25, -15), color)
+        bullets << Bullet.new(x, y - 15, size, Point.new(25, 0), color)
+        bullets << Bullet.new(x, y + 15, size, Point.new(25, 15), color)
       end
     end
 
     def action!
-      bullets.each(&:action!)
-      bullets.reject!{ |bullet| bullet.screen_out?(player.display_size) }
+      bullets.each { |bullet| bullet.action!(player.display_size) }
+    end
+
+    def reject_killed!
+      bullets.reject!(&:killed)
     end
 
     def each(&block)
@@ -71,7 +52,7 @@ class Player < Point
     end
   end
 
-  attr_reader :max_pos, :image, :size, :bullets, :canvas
+  attr_reader :max_pos, :image, :bullets, :canvas, :killed
 
   BASE_SPEED = 10.freeze
   IMG_PATH = './img/player.png'.freeze
@@ -79,16 +60,20 @@ class Player < Point
   # NOTE: image[:width]/image[:height]で取得しようとしたときに稀に0で取得される時があるのでべた書き
   SIZE = 50.freeze
 
-  def initialize(canvas, fps)
+  def initialize(canvas)
     @image = JS.eval('return new Image()')
     @image[:src] = IMG_PATH
-    @size = Point.new(SIZE, SIZE)
     @canvas = canvas
+
+    self.size = Point.new(SIZE, SIZE)
     @max_pos = Point.new(display_size.x - size.x, display_size.y - size.y)
     self.x = (max_pos.x * 0.1).to_i
     self.y = (max_pos.y * 0.5).to_i
+
+    # 当たり判定は小さめに
+    self.collision_offset = Box.new(0, (SIZE * 0.4).to_i, (SIZE * 0.2).to_i, (SIZE * 0.2).to_i)
+
     @bullets = Bullets.new(self)
-    @fps = fps
     @s_counter = 0
   end
 
@@ -118,8 +103,16 @@ class Player < Point
     end
   end
 
+  def reject_killed!
+    bullets.reject_killed!
+  end
+
   def display_size
     canvas.display_size
+  end
+
+  def hit!
+    @killed = true
   end
 
   private
@@ -127,17 +120,19 @@ class Player < Point
   def calc_type(key)
     boost = key.pressed?(:boost)
     moving = key.pressed?(:up) || key.pressed?(:down) || key.pressed?(:left) || key.pressed?(:right)
-    if boost && !moving
+    if !moving
       @s_counter += 1
     else
       @s_counter = 0
     end
 
     # 2secその場に留まるとsuper mode
-    if @s_counter > (@fps * 2)
-      :super
-    elsif boost
-      :boost
+    if boost
+      if @s_counter > canvas.fps
+        :super
+      else
+        :boost
+      end
     else
       :normal
     end

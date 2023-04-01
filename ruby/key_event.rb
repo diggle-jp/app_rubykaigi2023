@@ -38,6 +38,8 @@ class KeyEvent
       :shot
     when 'Shift'
       :boost
+    when 'Enter'
+      :enter
     else
       nil
     end
