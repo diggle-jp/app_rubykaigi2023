@@ -14,7 +14,7 @@ class Canvas
     canvas.setAttribute('height', display_size.y)
   end
 
-  def render(player)
+  def render(player, boss)
     context.clearRect(0, 0, display_size.x, display_size.y)
     context[:fillStyle] = 'gray'
     context.fillRect(0, 0, display_size.x, display_size.y)
@@ -30,6 +30,7 @@ class Canvas
       x += 100
     end
     render_player(player)
+    render_boss(boss)
   end
 
   private
@@ -39,7 +40,27 @@ class Canvas
 
     player.bullets.each do |bullet|
       context[:fillStyle] = bullet.color
-      context.fillRect(bullet.x, bullet.y, 10, 10)
+      context.fillRect(bullet.x, bullet.y, bullet.size.x, bullet.size.y)
     end
+  end
+
+  def render_boss(boss)
+    context[:fillStyle] = boss.color
+    context.fillRect(boss.x, boss.y, boss.size.x, boss.size.y)
+    context[:fillStyle] = '#ffffff'
+
+    context.beginPath();
+		context.moveTo(boss.x + 50, boss.y + 50)
+		context.lineTo(display_size.x, boss.y + 50)
+		context.lineTo(display_size.x, boss.y + 100)
+		context.closePath()
+    context.fill()
+
+    context.beginPath()
+		context.moveTo(boss.x + 50, boss.y + boss.size.y - 50)
+		context.lineTo(display_size.x, boss.y + boss.size.y - 50)
+		context.lineTo(display_size.x, boss.y + boss.size.y - 100)
+		context.closePath()
+    context.fill()
   end
 end
