@@ -24,8 +24,11 @@ class Canvas
     render_text('GAME for Ruby Kaigi 2023', display_center.x, display_center.y - 25, 'center', 50)
 
     if @counter > fps * 0.75
-      render_text('- Press ENTER to start -', display_center.x, display_center.y + 25, 'center', 25)
+      render_text('- Press SPACE to start -', display_center.x, display_center.y + 25, 'center', 25)
     end
+
+    render_text('このゲームはruby.wasmで実装しています', display_center.x, display_size.y - 150, 'center', 25)
+    render_text('操作方法などはブースで説明しておりますので、お気軽にお越しください', display_center.x, display_size.y - 100, 'center', 25)
 
     render_text('Presened by DIGGLE Inc.', display_size.x, display_size.y - 10, 'right', 15)
   end

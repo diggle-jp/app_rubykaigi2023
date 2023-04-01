@@ -42,7 +42,12 @@ class Boss < Box
           end
         end
         @counter += 1
-        @attacking = false if @counter > fps
+        if @counter > fps
+          @attacking = false 
+          self.y += (50 - rand(101))
+          self.y = 0 if y.negative?
+          self.y = player.display_size.y if y >= player.display_size.y
+        end
       end
     end
 
@@ -101,7 +106,7 @@ class Boss < Box
 
   def action!(player)
     enemies.each { |enemy| enemy.action!(player) }
-    if @counter.nil? || @counter > canvas.fps
+    if @counter.nil? || @counter > (canvas.fps * 0.5)
       enemies.sample(2).each(&:attack!)
       @counter = 0
     end

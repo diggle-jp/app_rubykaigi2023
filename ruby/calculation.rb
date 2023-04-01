@@ -34,7 +34,7 @@ class Calculation
   private
 
   def exec_start_menu
-    if key_event.pressed?(:enter)
+    if key_event.pressed?(:shot)
       start_game!
     else
       canvas.render_menu
@@ -45,7 +45,7 @@ class Calculation
     player.action!(key_event)
     boss.action!(player)
     detect_collision!(boss, player.bullets)
-    detect_collision!(player, boss.bullets)
+    # detect_collision!(player, boss.bullets)
     player.reject_killed!
     boss.reject_killed!
 
@@ -63,15 +63,6 @@ class Calculation
     # p "boss:#{boss.bullets.length}"
   end
 
-  def detect_collision!(target, attackers)
-    attackers.each do |attacker|
-      if target.collision_area.hit?(attacker.collision_area)
-        target.hit!
-        attacker.hit!
-      end
-    end
-  end
-
   def exec_gameover
     if key_event.pressed?(:enter)
       @status = :start_menu
@@ -85,6 +76,17 @@ class Calculation
       @status = :start_menu
     else
       canvas.render_clear(player, boss, timer)
+    end
+  end
+
+  private
+
+  def detect_collision!(target, attackers)
+    attackers.each do |attacker|
+      if target.collision_area.hit?(attacker.collision_area)
+        target.hit!
+        attacker.hit!
+      end
     end
   end
 
