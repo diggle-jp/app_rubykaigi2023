@@ -45,7 +45,7 @@ class Calculation
     player.action!(key_event)
     boss.action!(player)
     detect_collision!(boss, player.bullets)
-    # detect_collision!(player, boss.bullets)
+    detect_collision!(player, boss.bullets)
     player.reject_killed!
     boss.reject_killed!
 
