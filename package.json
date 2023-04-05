@@ -3,7 +3,6 @@
     "start": "reload -b"
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
     "reload": "^3.2.1"
   }
 }
