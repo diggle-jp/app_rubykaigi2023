@@ -6,18 +6,62 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Cache-Control" content="no-cache" />
   </head>
-  <script src="https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@latest/dist/browser.script.iife.js"></script>
-  <script type="text/ruby" src="ruby/point.rb?v=1"></script>
-  <script type="text/ruby" src="ruby/box.rb?v=1"></script>
-  <script type="text/ruby" src="ruby/key_event.rb?v=1"></script>
-  <script type="text/ruby" src="ruby/bullet.rb?v=1"></script>
-  <script type="text/ruby" src="ruby/player.rb?v=1"></script>
-  <script type="text/ruby" src="ruby/boss.rb?v=1"></script>
-  <script type="text/ruby" src="ruby/canvas.rb?v=1"></script>
-  <script type="text/ruby" src="ruby/calculation.rb?v=1"></script>
-  <script type="text/ruby" src="ruby/ruby.rb?v=1"></script>
   <link rel="stylesheet" href="index.css" />
   <body>
-    <canvas id="canvas" width="1200" height="1200" />
+    <div class="ui grid two column centered">
+      <div class="row">
+        <div class="column">
+          <h1>DIGGLE RubyKaigi 2023 特設ページ</h1>
+          <div class="ui message">
+            <p>
+              こちらはRubyKaigi 2023の特設ページとなります。<br />
+              本イベントに向けてruby.wasmを使用した弾幕シューティングゲームを作成しましたので、是非遊んでみてください。<br />
+              <br />
+              また、会場ではスポンサーブースを設置しております。 <br />
+              ブースでは、ゲームの操作方法、攻略情報、開発秘話など、ざっくばらんにお話しできればと思いますので、是非お立ち寄りください。<br />
+              また、クリアタイムのランキングを当ページ下部に表示しております。クリアしましたら弊社ブースにてご報告いただけますとランキングへ反映させていただきます。<br />
+              ※ソースコードについては希望される方には公開の用意がございますので、ブースにて個別にご相談ください。
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="row centered">
+        <button
+          class="ui blue basic button massive"
+          onclick="location.href='./game.html'"
+        >
+          ゲーム本編（Game here.）
+        </button>
+      </div>
+      <div class="row">
+        <div class="column">
+          <h3>クリアタイムランキング（Ranking）</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column">
+          <table id="ranking" class="ui celled table">
+            <thead>
+              <th>No.</th>
+              <th>name</th>
+              <th>time(ms)</th>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div class="column">
+            <button id="prev" class="ui button">&lt;&lt;</button>
+            <button id="next" class="ui button right floated">&gt;&gt;</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/ruby-head-wasm-wasi@latest/dist/browser.script.iife.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css"
+  />
+  <script type="text/ruby" src="ruby/ranking.rb"></script>
 </html>

@@ -1,31 +1,13 @@
 require 'js'
 
 $rank = [
-  ['[DIGGLE] zakky', 34.798],
+  ['[DIGGLE] zakky', 23.339],
   ['[DIGGLE] umeda', 32.952],
   ['[DIGGLE] t_ito', 16.933],
   ['[DIGGLE] niku', 21.345],
   ['[DIGGLE] taisei', 16.119],
   ['[DIGGLE] tushar', 52.651],
   ['[DIGGLE] kato', 23.464],
-  ['xxxx', 111],
-  ['xxxx', 112],
-  ['xxxx', 113],
-  ['xxxx', 114],
-  ['xxxx', 115],
-  ['xxxx', 116],
-  ['xxxx', 117],
-  ['xxxx', 118],
-  ['xxxx', 119],
-  ['xxxx', 120],
-  ['xxxx', 121],
-  ['xxxx', 122],
-  ['xxxx', 123],
-  ['xxxx', 124],
-  ['xxxx', 125],
-  ['xxxx', 126],
-  ['xxxx', 128],
-  ['xxxx', 129],
 ].sort{|a, b| a.last <=> b.last}.freeze
 # $JS_NULL = JS.eval("return null")
 $document = JS.global[:document]
@@ -36,12 +18,9 @@ $next_btn = $document.getElementById('next')
 class Ranking
   attr_reader :page
 
+  PER_PAGE = 10.freeze
   def initialize
     @page = 0
-  end
-
-  def create_header
-    create_tr('th', 'No.', 'name', 'time(ms)')
   end
 
   def create_tr(child_node, no, name, time)
@@ -54,24 +33,27 @@ class Ranking
     tr
   end
 
+  def rank(page)
+    arr = $rank.slice(page * PER_PAGE, PER_PAGE)
+    arr.concat([['-', '-']] * (PER_PAGE - arr.length))
+  end
+
   def render(offset)
     @page += offset
-    table = $document.getElementById('ranking')
-    until (target = table[:firstChild]) == JS::Null do
-      table.removeChild(target)
+    tbody = $document.querySelector('#ranking tbody')
+    until (target = tbody[:firstChild]) == JS::Null do
+      tbody.removeChild(target)
     end
 
-    table.appendChild(create_header)
-
-    s_idx = page * 10
-    $rank.slice(s_idx, 10).each.with_index do |rank, idx|
-      table.appendChild(create_tr('td', s_idx + idx + 1, *rank))
+    p rank(page)
+    rank(page).each.with_index do |rank, idx|
+      tbody.appendChild(create_tr('td', (page * PER_PAGE) + idx + 1, *rank))
     end
 
     $prev_btn[:disabled] = false
     $next_btn[:disabled] = false
     $prev_btn[:disabled] = true if page.zero?
-    $next_btn[:disabled] = true if (page + 1) * 10 > $rank.size
+    $next_btn[:disabled] = true if (page + 1) * PER_PAGE > $rank.size
   end
 end
 

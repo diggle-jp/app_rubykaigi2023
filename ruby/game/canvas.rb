@@ -41,8 +41,6 @@ class Canvas
 
     render_player(player)
     render_boss(boss)
-
-    render_text("#{boss.remain_hp} / #{boss.hp}", display_size.x, display_size.y - 10, 'right', 15)
   end
 
   def render_gameover(player, boss)
@@ -72,6 +70,8 @@ class Canvas
     if @counter > fps * 0.75
       render_text('- Press ENTER to back -', display_center.x, display_center.y + 50, 'center', 25)
     end
+
+    render_text('このページを表示した状態で弊社ブースへお越しください', display_center.x, display_size.y - 100, 'center', 25)
   end
 
   private
