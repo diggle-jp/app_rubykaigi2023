@@ -31,6 +31,7 @@ class Canvas
     render_text('操作方法などはブースで説明しておりますので、お気軽にお越しください', display_center.x, display_size.y - 100, 'center', 25)
 
     render_text('Presened by DIGGLE Inc.', display_size.x, display_size.y - 10, 'right', 15)
+    render_fps
   end
 
   def render_game(player, boss)
@@ -41,6 +42,7 @@ class Canvas
 
     render_player(player)
     render_boss(boss)
+    render_fps
   end
 
   def render_gameover(player, boss)
@@ -55,6 +57,7 @@ class Canvas
     if @counter > fps * 0.75
       render_text('- Press ENTER to back -', display_center.x, display_center.y + 25, 'center', 25)
     end
+    render_fps
   end
 
   def render_clear(player, boss, timer)
@@ -72,6 +75,7 @@ class Canvas
     end
 
     render_text('このページを表示した状態で弊社ブースへお越しください', display_center.x, display_size.y - 100, 'center', 25)
+    render_fps
   end
 
   private
@@ -119,6 +123,20 @@ class Canvas
       context[:fillStyle] = bullet.is_killer ? 'red' : bullet.color
       context.fillRect(bullet.x, bullet.y, bullet.size.x, bullet.size.y)
     end
+  end
+
+  def render_fps
+    @fps_counter ||= 0
+    @lasttime ||= Time.now
+    if @fps_counter >= fps / 2
+      time = Time.now - @lasttime
+      @last_fps = (@fps_counter / time).round(1)
+      @lasttime = Time.now
+      @fps_counter = 0
+    end
+    @fps_counter += 1
+    context[:fillStyle] = 'black'
+    render_text("FPS:#{@last_fps}", 0, 10, 'left', 10) unless @last_fps.nil?
   end
 
   def render_text(text, x, y, position, size)
