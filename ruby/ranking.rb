@@ -10,6 +10,7 @@ $rank = [
   ['[DIGGLE] kato', 23.464],
   ['verdy_266', 21.643],
   ['picopico', 18.986],
+  ['kawashima', 30.368],
 ].sort{|a, b| a.last <=> b.last}.freeze
 # $JS_NULL = JS.eval("return null")
 $document = JS.global[:document]
