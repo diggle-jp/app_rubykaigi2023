@@ -11,6 +11,8 @@ $rank = [
   ['verdy_266', 21.643],
   ['picopico', 18.986],
   ['kawashima', 30.368],
+  ['godezaji', 17.430],
+  ['Euyene', 21.201],
 ].sort{|a, b| a.last <=> b.last}.freeze
 # $JS_NULL = JS.eval("return null")
 $document = JS.global[:document]
