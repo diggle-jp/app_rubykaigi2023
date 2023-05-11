@@ -1,7 +1,7 @@
 require 'js'
 
 $rank = [
-  ['[DIGGLE] zakky', 23.339],
+  ['[DIGGLE] zakky', 15.103],
   ['[DIGGLE] umeda', 32.952],
   ['[DIGGLE] t_ito', 16.933],
   ['[DIGGLE] niku', 21.345],
