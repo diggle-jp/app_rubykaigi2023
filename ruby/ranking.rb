@@ -4,7 +4,7 @@ $rank = [
   ['[DIGGLE] zakky', 15.103],
   ['[DIGGLE] umeda', 32.952],
   ['[DIGGLE] t_ito', 16.933],
-  ['[DIGGLE] niku', 17.140],
+  ['[DIGGLE] niku', 14.909],
   ['[DIGGLE] taisei', 16.119],
   ['[DIGGLE] tushar', 52.651],
   ['[DIGGLE] kato', 23.464],
